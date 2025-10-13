@@ -1,0 +1,72 @@
+# robots.txt for Portfolio of Praveen Yadav - Full Stack Developer
+# Optimized for Google Search Engine and other major crawlers
+
+# Google Bot - Full Access
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0
+
+# Google Image Bot
+User-agent: Googlebot-Image
+Allow: /
+Crawl-delay: 0
+
+# Google Mobile Bot
+User-agent: Googlebot-Mobile
+Allow: /
+Crawl-delay: 0
+
+# Bing Bot
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 0
+
+# Yahoo Bot
+User-agent: Slurp
+Allow: /
+Crawl-delay: 1
+
+# DuckDuckGo Bot
+User-agent: DuckDuckBot
+Allow: /
+Crawl-delay: 0
+
+# Twitter Bot for Card Previews
+User-agent: Twitterbot
+Allow: /
+
+# Facebook Bot for Link Previews
+User-agent: facebookexternalhit
+Allow: /
+
+# LinkedIn Bot
+User-agent: LinkedInBot
+Allow: /
+
+# All Other Bots
+User-agent: *
+Allow: /
+Crawl-delay: 1
+
+# Disallow common unwanted paths (if any)
+Disallow: /api/
+Disallow: /admin/
+Disallow: /*.json$
+Disallow: /404
+Disallow: /error
+
+# Allow CSS, JS, Images, and other media files for proper rendering
+Allow: /*.css$
+Allow: /*.js$
+Allow: /*.png$
+Allow: /*.jpg$
+Allow: /*.jpeg$
+Allow: /*.gif$
+Allow: /*.svg$
+Allow: /*.webp$
+
+# Sitemap Location (Update with your actual domain)
+Sitemap: https://praveenyadavme.vercel.app/sitemap.xml
+
+# Host (Update with your actual domain)
+Host: praveenyadavme.vercel.app
