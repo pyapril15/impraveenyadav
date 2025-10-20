@@ -40,7 +40,7 @@ const HeroSection = () => {
             {/* Animated Ring Effects */}
             <div className="absolute -inset-2 rounded-full bg-cosmic-gradient animate-pulse-cosmic opacity-75"></div>
             <div className="absolute -inset-4 rounded-full bg-aurora-gradient opacity-30 animate-aurora-flow"></div>
-            <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-primary to-accent animate-spin duration-[8s] opacity-20"></div>
+            <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-primary to-accent animate-spin-slow opacity-20"></div>
             
             {/* Profile Image Container */}
             <motion.div
@@ -197,62 +197,6 @@ const HeroSection = () => {
           )}
         </div>
       </div>
-
-      {/* Enhanced Scroll Indicator */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 2.5, duration: 0.8 }}
-        className="absolute bottom-12 left-1/2 transform -translate-x-1/2 group cursor-pointer"
-        onClick={() => {
-          document.getElementById('projects')?.scrollIntoView({ 
-            behavior: 'smooth' 
-          });
-        }}
-      >
-        <motion.div
-          animate={{ y: [0, 15, 0] }}
-          transition={{ 
-            duration: 2.5, 
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-          className="w-8 h-12 border-2 border-primary/60 rounded-full flex justify-center relative hover:border-primary transition-all duration-300 group-hover:scale-110"
-        >
-          <motion.div
-            animate={{ y: [0, 16, 0], opacity: [0.5, 1, 0.5] }}
-            transition={{ 
-              duration: 2.5, 
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-            className="w-1.5 h-4 bg-primary rounded-full mt-2 group-hover:bg-accent transition-all duration-300"
-          />
-          
-          {/* Glow Effect */}
-          <motion.div
-            animate={{ 
-              opacity: [0.3, 0.8, 0.3],
-              scale: [1, 1.2, 1]
-            }}
-            transition={{ 
-              duration: 2.5, 
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-            className="absolute inset-0 rounded-full bg-primary/20 blur-sm"
-          />
-        </motion.div>
-        
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 0.7 }}
-          transition={{ delay: 3 }}
-          className="text-xs text-muted-foreground mt-3 text-center group-hover:text-foreground transition-all duration-300"
-        >
-          Scroll to explore
-        </motion.p>
-      </motion.div>
     </section>
   );
 };

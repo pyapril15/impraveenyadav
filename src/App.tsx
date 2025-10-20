@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { HelmetProvider } from 'react-helmet-async';
 import LoadingScreen from "@/components/LoadingScreen";
 import Navigation from "@/components/Navigation";
+import FestiveOverlay from "@/components/FestiveOverlay";
 
 // Lazy load pages for better performance
 const Index = lazy(() => import("./pages/Index"));
@@ -46,6 +47,7 @@ const App = () => {
             <LoadingScreen onLoadingComplete={handleLoadingComplete} />
           ) : (
             <BrowserRouter>
+              <FestiveOverlay />
               <div className="relative min-h-screen">
                 <Navigation />
                 <Suspense fallback={<PageLoader />}>

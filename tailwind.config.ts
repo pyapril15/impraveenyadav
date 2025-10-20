@@ -179,6 +179,10 @@ export default {
           "0%": { transform: "rotate(0deg) translateX(100px) rotate(0deg)" },
           "100%": { transform: "rotate(360deg) translateX(100px) rotate(-360deg)" },
         },
+        "spin-slow": {
+          "0%": { transform: "rotate(0deg)" },
+          "100%": { transform: "rotate(360deg)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
@@ -204,6 +208,7 @@ export default {
         "morph": "morph 8s ease-in-out infinite",
         "levitate": "levitate 4s ease-in-out infinite",
         "orbit": "orbit 10s linear infinite",
+        "spin-slow": "spin-slow 8s linear infinite",
         
         // Combined animations
         "enter": "fade-in 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), scale-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)",

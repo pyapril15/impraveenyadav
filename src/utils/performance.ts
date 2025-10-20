@@ -3,7 +3,8 @@
  */
 
 // Monitor Core Web Vitals
-export const reportWebVitals = (onPerfEntry?: (metric: any) => void) => {
+import { Metric } from 'web-vitals';
+export const reportWebVitals = (onPerfEntry?: (metric: Metric) => void) => {
   if (onPerfEntry && typeof window !== 'undefined') {
     import('web-vitals').then(({ onCLS, onINP, onFCP, onLCP, onTTFB }) => {
       onCLS(onPerfEntry);
@@ -43,7 +44,7 @@ export const createImageObserver = () => {
 };
 
 // Debounce function for performance
-export const debounce = <T extends (...args: any[]) => any>(
+export const debounce = <T extends (...args: unknown[]) => unknown>(
   func: T,
   wait: number
 ): ((...args: Parameters<T>) => void) => {
@@ -56,7 +57,7 @@ export const debounce = <T extends (...args: any[]) => any>(
 };
 
 // Throttle function for scroll events
-export const throttle = <T extends (...args: any[]) => any>(
+export const throttle = <T extends (...args: unknown[]) => unknown>(
   func: T,
   limit: number
 ): ((...args: Parameters<T>) => void) => {
