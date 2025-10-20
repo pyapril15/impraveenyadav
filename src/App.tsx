@@ -44,7 +44,7 @@ const App = () => {
           <Sonner />
           
           {isLoading ? (
-            <LoadingScreen onLoadingComplete={handleLoadingComplete} />
+            <LoadingScreen onLoadingComplete={handleLoadingComplete} logoImage="/android-chrome-192x192.png"/>
           ) : (
             <BrowserRouter>
               <FestiveOverlay />
