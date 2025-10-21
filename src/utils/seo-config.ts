@@ -5,14 +5,15 @@
 
 // Core SEO Configuration
 export const SEO_CONFIG = {
-  siteName: "Professional Portfolio",
-  defaultTitle: "Professional Portfolio | Full Stack Developer & Designer",
-  defaultDescription: "Explore innovative projects, technical expertise, and professional journey in web development. Specialized in React, TypeScript, Node.js, and modern web technologies.",
-  siteUrl: typeof window !== 'undefined' ? window.location.origin : '',
+  siteName: "Praveen Yadav - Full Stack Developer",
+  defaultTitle: "Praveen Yadav | Full Stack Developer Portfolio",
+  defaultDescription: "Explore my portfolio showcasing innovative projects, technical expertise, and professional journey in full-stack development and design with React, Node.js, and modern web technologies.",
+  siteUrl: typeof window !== 'undefined' ? window.location.origin : 'https://praveenyadavme.vercel.app',
   defaultImage: "/og-image.png",
-  twitterHandle: "@portfolio",
+  twitterHandle: "@praveenyadavdev",
   locale: "en_US",
   keywords: [
+    "Praveen Yadav",
     "web developer",
     "portfolio",
     "software engineer",
@@ -21,11 +22,12 @@ export const SEO_CONFIG = {
     "React developer",
     "TypeScript",
     "Node.js",
+    "Python",
+    "JavaScript",
     "frontend developer",
     "backend developer",
     "responsive design",
     "web applications",
-    "JavaScript developer",
     "modern web development"
   ]
 };
@@ -33,34 +35,34 @@ export const SEO_CONFIG = {
 // Page-specific SEO metadata
 export const PAGE_SEO = {
   home: {
-    title: "Home | Professional Portfolio",
-    description: "Welcome to my portfolio. Discover innovative web applications, technical expertise, and a passion for creating exceptional digital experiences.",
-    keywords: "portfolio home, web developer portfolio, software engineer, full stack developer"
+    title: "Praveen Yadav | Full Stack Developer Portfolio",
+    description: "Welcome to my portfolio. Discover innovative web applications, technical expertise, and a passion for creating exceptional digital experiences with React, Node.js, Python, and modern web technologies.",
+    keywords: "Praveen Yadav, portfolio home, web developer portfolio, software engineer, full stack developer"
   },
   about: {
-    title: "About Me | Professional Developer",
-    description: "Learn about my journey, skills, and passion for web development. Experienced in building scalable applications with modern technologies.",
-    keywords: "about developer, professional background, web development experience, technical skills"
+    title: "About Praveen Yadav | Full Stack Developer",
+    description: "Learn about my journey, skills, and passion for web development. Experienced in building scalable applications with React, TypeScript, Node.js, Python, and modern technologies.",
+    keywords: "about Praveen Yadav, professional background, web development experience, technical skills, developer journey"
   },
   projects: {
-    title: "Projects | My Work & Portfolio",
-    description: "Explore my portfolio of web applications, from e-commerce platforms to interactive dashboards. Built with React, TypeScript, and modern frameworks.",
-    keywords: "web projects, portfolio work, React applications, TypeScript projects, web applications"
+    title: "Projects | Praveen Yadav's Portfolio Work",
+    description: "Explore my portfolio of web applications, from e-commerce platforms to interactive dashboards. Built with React, TypeScript, Node.js, Python, and modern frameworks.",
+    keywords: "Praveen Yadav projects, web projects, portfolio work, React applications, TypeScript projects, web applications"
   },
   skills: {
-    title: "Skills & Expertise | Technical Proficiency",
-    description: "Comprehensive overview of my technical skills including React, TypeScript, Node.js, databases, and modern development tools.",
-    keywords: "technical skills, programming languages, web technologies, development tools, frontend backend"
+    title: "Skills & Expertise | Praveen Yadav Technical Proficiency",
+    description: "Comprehensive overview of my technical skills including React, TypeScript, Node.js, Python, databases, and modern development tools and frameworks.",
+    keywords: "Praveen Yadav skills, technical skills, programming languages, web technologies, development tools, frontend backend"
   },
   certificates: {
-    title: "Certifications | Professional Credentials",
-    description: "View my professional certifications and achievements in web development, programming, and software engineering.",
-    keywords: "certifications, professional credentials, web development certificates, programming certifications"
+    title: "Certifications | Praveen Yadav Professional Credentials",
+    description: "View my professional certifications and achievements in web development, programming, and software engineering from top platforms and institutions.",
+    keywords: "Praveen Yadav certifications, professional credentials, web development certificates, programming certifications"
   },
   contact: {
-    title: "Contact Me | Let's Work Together",
-    description: "Get in touch to discuss your project, collaboration opportunities, or just to say hello. Fast response times and always happy to help.",
-    keywords: "contact developer, hire developer, project inquiry, collaboration, web development services"
+    title: "Contact Praveen Yadav | Let's Work Together",
+    description: "Get in touch to discuss your project, collaboration opportunities, or just to say hello. Fast response times and always happy to help with web development needs.",
+    keywords: "contact Praveen Yadav, hire developer, project inquiry, collaboration, web development services"
   }
 };
 
@@ -91,15 +93,10 @@ export const generateOGImageUrl = (imagePath?: string): string => {
 };
 
 /**
- * Google Search Console verification helper
- * Add this to your index.html or use via Helmet
+ * Google Tag Manager ID
+ * Already implemented in index.html
  */
-export const getGoogleVerificationMeta = () => {
-  return {
-    name: "google-site-verification",
-    content: "your-google-verification-code-here" // Replace with actual code from Google Search Console
-  };
-};
+export const GOOGLE_TAG_MANAGER_ID = "GTM-ML8MLLG2";
 
 /**
  * Generate canonical URL

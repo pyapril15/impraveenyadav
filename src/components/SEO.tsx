@@ -38,7 +38,8 @@ const DEFAULT_SEO = {
 
 /**
  * Professional SEO Component
- * Handles all meta tags, Open Graph, Twitter Cards, and Structured Data
+ * Handles page-specific meta tags, Open Graph, Twitter Cards, and Structured Data
+ * Site-wide SEO is handled in index.html
  */
 const SEO = ({
   title = DEFAULT_SEO.title,
@@ -92,10 +93,7 @@ const SEO = ({
 
   return (
     <Helmet>
-      {/* HTML Language */}
-      <html lang="en" />
-
-      {/* ==================== PRIMARY META TAGS ==================== */}
+      {/* ==================== PAGE-SPECIFIC META TAGS ==================== */}
       <title>{fullTitle}</title>
       <meta name="title" content={fullTitle} />
       <meta name="description" content={description} />
@@ -103,25 +101,9 @@ const SEO = ({
       <meta name="author" content={author} />
       <link rel="canonical" href={currentUrl} />
 
-      {/* ==================== VIEWPORT & MOBILE ==================== */}
-      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
-      <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-      <meta name="mobile-web-app-capable" content="yes" />
-      <meta name="apple-mobile-web-app-capable" content="yes" />
-      <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-      <meta name="apple-mobile-web-app-title" content="Praveen Yadav" />
-      <meta name="format-detection" content="telephone=no" />
-
       {/* ==================== SEARCH ENGINE OPTIMIZATION ==================== */}
       <meta name="robots" content={robots} />
       <meta name="googlebot" content={robots} />
-      <meta name="bingbot" content={robots} />
-      <meta name="google" content="notranslate" />
-      <meta name="revisit-after" content="7 days" />
-      <meta name="distribution" content="global" />
-      <meta name="rating" content="general" />
-      <meta httpEquiv="Content-Language" content="en-US" />
-      <meta name="language" content="English" />
 
       {/* ==================== OPEN GRAPH / FACEBOOK ==================== */}
       <meta property="og:type" content={type} />
@@ -166,29 +148,6 @@ const SEO = ({
       <meta name="twitter:image" content={fullImageUrl} />
       <meta name="twitter:image:alt" content={title} />
 
-      {/* ==================== THEME & BRANDING ==================== */}
-      <meta name="theme-color" content="#6366f1" />
-      <meta name="msapplication-TileColor" content="#6366f1" />
-      <meta name="msapplication-config" content="/browserconfig.xml" />
-
-      {/* ==================== PERFORMANCE - PRECONNECT & DNS PREFETCH ==================== */}
-      <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-      <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-      <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
-
-      {/* ==================== ALTERNATE LANGUAGES ==================== */}
-      <link rel="alternate" hrefLang="en" href={currentUrl} />
-      <link rel="alternate" hrefLang="en-US" href={currentUrl} />
-      <link rel="alternate" hrefLang="x-default" href={currentUrl} />
-
-      {/* ==================== FAVICON & APP ICONS ==================== */}
-      <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-      <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-      <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-      <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-      <link rel="manifest" href="/manifest.json" />
-
       {/* ==================== STRUCTURED DATA (JSON-LD) ==================== */}
       {mergedStructuredData && (
         Array.isArray(mergedStructuredData) ? (
@@ -203,58 +162,6 @@ const SEO = ({
           </script>
         )
       )}
-
-      {/* ==================== BREADCRUMB SCHEMA (Optional) ==================== */}
-      <script type="application/ld+json">
-        {JSON.stringify({
-          '@context': 'https://schema.org',
-          '@type': 'BreadcrumbList',
-          itemListElement: [
-            {
-              '@type': 'ListItem',
-              position: 1,
-              name: 'Home',
-              item: `${siteUrl}/`,
-            },
-            {
-              '@type': 'ListItem',
-              position: 2,
-              name: 'Projects',
-              item: `${siteUrl}/projects`,
-            },
-            {
-              '@type': 'ListItem',
-              position: 3,
-              name: 'About',
-              item: `${siteUrl}/about`,
-            },
-            {
-              '@type': 'ListItem',
-              position: 4,
-              name: 'Contact',
-              item: `${siteUrl}/contact`,
-            },
-          ],
-        }, null, 2)}
-      </script>
-
-      {/* ==================== ORGANIZATION SCHEMA ==================== */}
-      <script type="application/ld+json">
-        {JSON.stringify({
-          '@context': 'https://schema.org',
-          '@type': 'WebSite',
-          name: ogSiteName,
-          url: siteUrl,
-          potentialAction: {
-            '@type': 'SearchAction',
-            target: {
-              '@type': 'EntryPoint',
-              urlTemplate: `${siteUrl}/search?q={search_term_string}`,
-            },
-            'query-input': 'required name=search_term_string',
-          },
-        }, null, 2)}
-      </script>
     </Helmet>
   );
 };
