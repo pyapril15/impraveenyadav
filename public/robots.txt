@@ -4,17 +4,14 @@
 # Google Bot - Full Access
 User-agent: Googlebot
 Allow: /
-Crawl-delay: 0
 
 # Google Image Bot
 User-agent: Googlebot-Image
 Allow: /
-Crawl-delay: 0
 
 # Google Mobile Bot
 User-agent: Googlebot-Mobile
 Allow: /
-Crawl-delay: 0
 
 # Bing Bot
 User-agent: Bingbot
@@ -69,4 +66,4 @@ Allow: /*.webp$
 Sitemap: https://praveenyadavme.vercel.app/sitemap.xml
 
 # Host (Update with your actual domain)
-Host: praveenyadavme.vercel.app
+Host: https://praveenyadavme.vercel.app

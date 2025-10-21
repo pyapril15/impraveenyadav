@@ -77,9 +77,9 @@ const SEO = ({
     url: siteUrl,
     image: fullImageUrl,
     sameAs: [
-      'https://github.com/praveenyadavme',
-      'https://linkedin.com/in/praveenyadav',
-      'https://twitter.com/praveenyadavdev',
+      'https://github.com/pyapril15',
+      'https://linkedin.com/in/pyapril15',
+      'https://twitter.com/pyapril15',
     ],
     jobTitle: 'Full Stack Developer',
     worksFor: {
