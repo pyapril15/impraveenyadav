@@ -16,17 +16,14 @@ Allow: /
 # Bing Bot
 User-agent: Bingbot
 Allow: /
-Crawl-delay: 0
 
 # Yahoo Bot
 User-agent: Slurp
 Allow: /
-Crawl-delay: 1
 
 # DuckDuckGo Bot
 User-agent: DuckDuckBot
 Allow: /
-Crawl-delay: 0
 
 # Twitter Bot for Card Previews
 User-agent: Twitterbot
@@ -43,7 +40,6 @@ Allow: /
 # All Other Bots
 User-agent: *
 Allow: /
-Crawl-delay: 1
 
 # Disallow common unwanted paths (if any)
 Disallow: /api/
