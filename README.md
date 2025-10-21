@@ -1,6 +1,6 @@
 # Full Stack Developer Portfolio
 
-A modern, responsive personal portfolio website built with React, Vite, and Supabase. This portfolio showcase my projects, technical skills, professional experience, and provides an elegant platform for visitors to explore my work and connect with me.
+A modern, responsive personal portfolio website built with React, Vite, and Supabase. This portfolio showcases my projects, technical skills, professional experience, and provides an elegant platform for visitors to explore my work and connect with me.
 
 The site features a sleek, contemporary design with smooth animations, interactive elements, and a fully responsive layout that delivers an exceptional user experience across all devices.
 
