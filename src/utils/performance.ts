@@ -3,8 +3,7 @@
  */
 
 // Monitor Core Web Vitals
-import { Metric } from 'web-vitals';
-export const reportWebVitals = (onPerfEntry?: (metric: Metric) => void) => {
+export const reportWebVitals = (onPerfEntry?: (metric: unknown) => void) => {
   if (onPerfEntry && typeof window !== 'undefined') {
     import('web-vitals').then(({ onCLS, onINP, onFCP, onLCP, onTTFB }) => {
       onCLS(onPerfEntry);
@@ -23,7 +22,7 @@ export const createImageObserver = () => {
   if (typeof window === 'undefined' || !('IntersectionObserver' in window)) {
     return null;
   }
-  
+
   return new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
@@ -49,7 +48,7 @@ export const debounce = <T extends (...args: unknown[]) => unknown>(
   wait: number
 ): ((...args: Parameters<T>) => void) => {
   let timeout: NodeJS.Timeout;
-  
+
   return (...args: Parameters<T>) => {
     clearTimeout(timeout);
     timeout = setTimeout(() => func(...args), wait);
@@ -61,29 +60,39 @@ export const throttle = <T extends (...args: unknown[]) => unknown>(
   func: T,
   limit: number
 ): ((...args: Parameters<T>) => void) => {
-  let inThrottle: boolean;
-  
+  let inThrottle = false;
+
   return (...args: Parameters<T>) => {
     if (!inThrottle) {
-      func(...args);
+      // cast is safe because func accepts Parameters<T>
+      (func as (...a: Parameters<T>) => unknown)(...args);
       inThrottle = true;
       setTimeout(() => (inThrottle = false), limit);
     }
   };
 };
-
-// Measure component render time
+// Measure component render time (production-ready)
+declare global {
+  interface Window {
+    dataLayer?: Array<Record<string, unknown>>;
+  }
+}
 export const measureRenderTime = (componentName: string) => {
   if (typeof window === 'undefined' || !window.performance) return;
-  
+
   const startTime = performance.now();
-  
+
   return () => {
     const endTime = performance.now();
     const renderTime = endTime - startTime;
-    
-    if (renderTime > 16.67) { // More than one frame (60fps)
-      console.warn(`${componentName} render took ${renderTime.toFixed(2)}ms`);
+
+    // Send performance metrics to GTM in production
+    if (renderTime > 16.67 && typeof window !== 'undefined' && window.dataLayer) {
+      window.dataLayer.push({
+        event: 'performance_metric',
+        component_name: componentName,
+        render_time: renderTime.toFixed(2),
+      });
     }
   };
 };
@@ -91,7 +100,7 @@ export const measureRenderTime = (componentName: string) => {
 // Preload critical resources
 export const preloadResource = (href: string, as: string) => {
   if (typeof document === 'undefined') return;
-  
+
   const link = document.createElement('link');
   link.rel = 'preload';
   link.as = as;

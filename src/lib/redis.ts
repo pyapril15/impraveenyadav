@@ -5,11 +5,11 @@ const REDIS_HOST = 'redis-14242.crce179.ap-south-1-1.ec2.redns.redis-cloud.com';
 const REDIS_PORT = 14242;
 
 // Since this is client-side, we'll use a simple cache with localStorage fallback
-class ClientCache {
-  private cache = new Map<string, { data: any; expiry: number }>();
+class ClientCache<T = unknown> {
+  private cache = new Map<string, { data: T; expiry: number }>();
   private readonly TTL = 10 * 60 * 1000; // 10 minutes
 
-  async get(key: string) {
+  async get(key: string): Promise<T | null> {
     // Check memory cache first
     const cached = this.cache.get(key);
     if (cached && cached.expiry > Date.now()) {
@@ -20,7 +20,7 @@ class ClientCache {
     try {
       const stored = localStorage.getItem(`cache_${key}`);
       if (stored) {
-        const parsed = JSON.parse(stored);
+        const parsed = JSON.parse(stored) as { data: T; expiry: number };
         if (parsed.expiry > Date.now()) {
           this.cache.set(key, parsed);
           return parsed.data;
@@ -33,7 +33,7 @@ class ClientCache {
     return null;
   }
 
-  async set(key: string, data: any, ttl?: number) {
+  async set(key: string, data: T, ttl?: number): Promise<void> {
     const expiry = Date.now() + (ttl || this.TTL);
     const cacheItem = { data, expiry };
     
@@ -48,7 +48,7 @@ class ClientCache {
     }
   }
 
-  async del(key: string) {
+  async del(key: string): Promise<void> {
     this.cache.delete(key);
     try {
       localStorage.removeItem(`cache_${key}`);
@@ -68,7 +68,7 @@ class ClientCache {
   }
 }
 
-export const cache = new ClientCache();
+export const cache = new ClientCache<unknown>();
 
 // Cleanup expired items every 10 minutes
 setInterval(() => cache.cleanup(), 10 * 60 * 1000);
