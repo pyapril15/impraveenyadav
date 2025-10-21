@@ -117,7 +117,6 @@ const SEO = ({
       <meta name="googlebot" content={robots} />
       <meta name="bingbot" content={robots} />
       <meta name="google" content="notranslate" />
-      <meta name="google-site-verification" content="nu83I0yeJbNck4Uf_EBSOWlzMI4whCQ86CZVmWKTKog" />
       <meta name="revisit-after" content="7 days" />
       <meta name="distribution" content="global" />
       <meta name="rating" content="general" />
