@@ -3,16 +3,18 @@ import App from "./App.tsx";
 import "./index.css";
 import { reportWebVitals } from "./utils/performance";
 
-// Define a type for window with dataLayer property
-interface WindowWithDataLayer extends Window {
-  dataLayer?: Array<Record<string, unknown>>;
+// Extend Window interface for Google Tag Manager
+declare global {
+  interface Window {
+    dataLayer: Record<string, unknown>[];
+  }
 }
 
 // Monitor Core Web Vitals for performance tracking
 reportWebVitals((metric) => {
   // Send metrics to Google Tag Manager for production analytics
-  if (typeof window !== 'undefined' && (window as WindowWithDataLayer).dataLayer) {
-    (window as WindowWithDataLayer).dataLayer.push({
+  if (typeof window !== 'undefined' && window.dataLayer) {
+    window.dataLayer.push({
       event: 'web_vitals',
       metric_name: metric.name,
       metric_value: metric.value,

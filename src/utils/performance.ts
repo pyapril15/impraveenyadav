@@ -2,8 +2,23 @@
  * Performance monitoring and optimization utilities
  */
 
+// Extend Window interface for Google Tag Manager
+declare global {
+  interface Window {
+    dataLayer: Record<string, unknown>[];
+  }
+}
+
+// Web Vitals Metric type
+interface WebVitalsMetric {
+  name: string;
+  value: number;
+  id: string;
+  delta: number;
+}
+
 // Monitor Core Web Vitals
-export const reportWebVitals = (onPerfEntry?: (metric: unknown) => void) => {
+export const reportWebVitals = (onPerfEntry?: (metric: WebVitalsMetric) => void) => {
   if (onPerfEntry && typeof window !== 'undefined') {
     import('web-vitals').then(({ onCLS, onINP, onFCP, onLCP, onTTFB }) => {
       onCLS(onPerfEntry);
@@ -60,23 +75,18 @@ export const throttle = <T extends (...args: unknown[]) => unknown>(
   func: T,
   limit: number
 ): ((...args: Parameters<T>) => void) => {
-  let inThrottle = false;
+  let inThrottle: boolean;
 
   return (...args: Parameters<T>) => {
     if (!inThrottle) {
-      // cast is safe because func accepts Parameters<T>
-      (func as (...a: Parameters<T>) => unknown)(...args);
+      func(...args);
       inThrottle = true;
       setTimeout(() => (inThrottle = false), limit);
     }
   };
 };
+
 // Measure component render time (production-ready)
-declare global {
-  interface Window {
-    dataLayer?: Array<Record<string, unknown>>;
-  }
-}
 export const measureRenderTime = (componentName: string) => {
   if (typeof window === 'undefined' || !window.performance) return;
 
