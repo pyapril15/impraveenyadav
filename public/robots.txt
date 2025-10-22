@@ -58,8 +58,5 @@ Allow: /*.gif$
 Allow: /*.svg$
 Allow: /*.webp$
 
-# Sitemap Location (Update with your actual domain)
+# Sitemap Location
 Sitemap: https://praveenyadavme.vercel.app/sitemap.xml
-
-# Host (Update with your actual domain)
-Host: https://praveenyadavme.vercel.app
