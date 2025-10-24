@@ -26,15 +26,15 @@ export type JourneyTimeline = Tables<'journey_timeline'>;
 // Personal Info Hook - Now uses secure public view
 export const usePersonalInfo = () => {
   return useQuery({
-    queryKey: ['portfolio-public-info'],
+    queryKey: ['personal_info'],
     queryFn: async (): Promise<PersonalInfo | null> => {
-      const cacheKey = 'portfolio-public-info';
+      const cacheKey = 'personal_info';
       const cached = await cache.get(cacheKey);
       if (cached) return cached;
 
       // Use the secure public view that excludes sensitive contact info
       const { data, error } = await supabase
-        .from('portfolio_public_info')
+        .from('personal_info')
         .select('*')
         .limit(1)
         .maybeSingle();
