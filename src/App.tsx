@@ -6,11 +6,12 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import LoadingScreen from "@/components/LoadingScreen";
 import Navigation from "@/components/Navigation";
 import FestivalOverlay from "@/components/FestivalOverlay";
+import { PortfolioChatbot } from "@/components/PortfolioChatbot";
 
 // ⬇️ Import the fetch functions used in hooks (not hooks themselves)
 import { supabase } from "@/integrations/supabase/client";
@@ -131,6 +132,17 @@ function prefetchIdlePages() {
   }
 }
 
+// Scroll to top on route change
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+};
+
 /* 🧠 Main App Component */
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -168,6 +180,7 @@ const App = () => {
             />
           ) : (
             <BrowserRouter>
+              <ScrollToTop />
               <FestivalOverlay />
               <div className="relative min-h-screen flex flex-col">
                 <Navigation />
@@ -184,6 +197,7 @@ const App = () => {
                       <Route path="*" element={<NotFound />} />
                     </Routes>
                   </Suspense>
+                  <PortfolioChatbot />
                 </main>
               </div>
             </BrowserRouter>
