@@ -12,6 +12,7 @@ import LoadingScreen from "@/components/LoadingScreen";
 import Navigation from "@/components/Navigation";
 import FestivalOverlay from "@/components/FestivalOverlay";
 import { PortfolioChatbot } from "@/components/PortfolioChatbot";
+import PortfolioRibbon from "@/components/PortfolioRibbon";
 
 // ⬇️ Import the fetch functions used in hooks (not hooks themselves)
 import { supabase } from "@/integrations/supabase/client";
@@ -198,6 +199,7 @@ const App = () => {
                     </Routes>
                   </Suspense>
                   <PortfolioChatbot />
+                  <PortfolioRibbon />
                 </main>
               </div>
             </BrowserRouter>
