@@ -12,8 +12,11 @@ import LoadingScreen from "@/components/LoadingScreen";
 import Navigation from "@/components/Navigation";
 import FestivalOverlay from "@/components/FestivalOverlay";
 
+// ⬇️ Import the fetch functions used in hooks (not hooks themselves)
+import { supabase } from "@/integrations/supabase/client";
+import { redis } from "@/lib/redis";
 
-/* 🧩 Lazy-loaded Pages (Code Splitting) */
+/* 🧩 Lazy-loaded Pages */
 const Index = lazy(() => import("./pages/Index"));
 const About = lazy(() => import("./pages/About"));
 const Projects = lazy(() => import("./pages/Projects"));
@@ -22,7 +25,7 @@ const Certificates = lazy(() => import("./pages/Certificates"));
 const Contact = lazy(() => import("./pages/Contact"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
-/* ⏳ Page Loader (Fallback for Lazy Pages) */
+/* ⏳ Fallback Loader */
 const PageLoader = () => (
   <div className="min-h-screen flex items-center justify-center bg-background">
     <div className="flex flex-col items-center gap-4">
@@ -46,33 +49,118 @@ const queryClient = new QueryClient({
   },
 });
 
+/* 🧠 Data Fetchers (for Prefetching) */
+const fetchPersonalInfo = async () => {
+  const cacheKey = "personal_info";
+  const cached = await redis.get(cacheKey);
+  if (cached) return cached;
+
+  const { data, error } = await supabase
+    .from("personal_info")
+    .select("*")
+    .limit(1)
+    .maybeSingle();
+
+  if (error) throw error;
+  if (data) redis.set(cacheKey, data, 86400).catch(() => null);
+  return data;
+};
+
+const fetchFestivals = async (year: number) => {
+  const cacheKey = `festivals_${year}_all`;
+  const cached = await redis.get(cacheKey);
+  if (cached) return cached;
+
+  const res = await fetch(`https://indian-festivals-api.onrender.com/api/v1/festivals/${year}`);
+  if (!res.ok) throw new Error("Failed to fetch festivals");
+  const json = await res.json();
+  redis.set(cacheKey, json, 86400).catch(() => null);
+  return json;
+};
+
+const fetchReligiousFestivals = async (year: number) => {
+  const cacheKey = `religious_festivals_${year}_all`;
+  const cached = await redis.get(cacheKey);
+  if (cached) return cached;
+
+  const res = await fetch(`https://indian-festivals-api.onrender.com/api/v1/festivals/${year}/religious`);
+  if (!res.ok) throw new Error("Failed to fetch religious festivals");
+  const json = await res.json();
+  redis.set(cacheKey, json, 86400).catch(() => null);
+  return json;
+};
+
+/* 🧠 Prefetch Key App Data */
+async function prefetchEssentialData() {
+  try {
+    const currentYear = new Date().getFullYear();
+    await Promise.allSettled([
+      queryClient.prefetchQuery({
+        queryKey: ["personal_info"],
+        queryFn: fetchPersonalInfo,
+      }),
+      queryClient.prefetchQuery({
+        queryKey: ["festivals", currentYear],
+        queryFn: () => fetchFestivals(currentYear),
+      }),
+      queryClient.prefetchQuery({
+        queryKey: ["religious-festivals", currentYear],
+        queryFn: () => fetchReligiousFestivals(currentYear),
+      }),
+    ]);
+    if (import.meta.env.DEV) console.log("⚡ Prefetched essential data.");
+  } catch (err) {
+    console.warn("Prefetch failed:", err);
+  }
+}
+
+/* 🧩 Prefetch Secondary (Idle) Routes */
+function prefetchIdlePages() {
+  if ("requestIdleCallback" in window) {
+    requestIdleCallback(() => {
+      [
+        () => import("./pages/About"),
+        () => import("./pages/Projects"),
+        () => import("./pages/Skills"),
+        () => import("./pages/Certificates"),
+        () => import("./pages/Contact"),
+      ].forEach((loader) => loader());
+    });
+  } else {
+    setTimeout(prefetchIdlePages, 3000);
+  }
+}
+
 /* 🧠 Main App Component */
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
 
-  /* ✅ Handle loading completion */
   const handleLoadingComplete = (): void => {
     setIsLoading(false);
   };
 
-  /* 📊 Optional: Monitor app performance */
+  /* 📊 Performance Metrics */
   useEffect(() => {
     if (!isLoading && typeof window !== "undefined" && window.performance?.timing) {
-      const perfData = window.performance.timing;
-      const pageLoadTime = perfData.loadEventEnd - perfData.navigationStart;
-      console.log(`✓ App loaded in ${pageLoadTime}ms`);
+      const t = window.performance.timing;
+      const loadTime = t.loadEventEnd - t.navigationStart;
+      console.log(`✓ App interactive in ${loadTime}ms`);
     }
   }, [isLoading]);
+
+  /* 🪄 Prefetch Data & Idle Pages */
+  useEffect(() => {
+    prefetchEssentialData();
+    prefetchIdlePages();
+  }, []);
 
   return (
     <HelmetProvider>
       <QueryClientProvider client={queryClient}>
         <TooltipProvider>
-          {/* 🔔 Toast Notifications */}
           <Toaster />
           <Sonner />
 
-          {/* 🌀 Loading Screen or Main App */}
           {isLoading ? (
             <LoadingScreen
               onLoadingComplete={handleLoadingComplete}
@@ -80,29 +168,19 @@ const App = () => {
             />
           ) : (
             <BrowserRouter>
-              {/* 🎉 Festive Overlay (seasonal effects) */}
               <FestivalOverlay />
-
-              {/* 🧭 Main Layout */}
               <div className="relative min-h-screen flex flex-col">
                 <Navigation />
 
-                {/* 🗺 App Routes */}
                 <main className="flex-1">
                   <Suspense fallback={<PageLoader />}>
                     <Routes>
-                      {/* 🏠 Home */}
                       <Route path="/" element={<Index />} />
-
-                      {/* 📄 Main Pages */}
                       <Route path="/about" element={<About />} />
                       <Route path="/projects" element={<Projects />} />
                       <Route path="/skills" element={<Skills />} />
                       <Route path="/certificates" element={<Certificates />} />
                       <Route path="/contact" element={<Contact />} />
-
-                      {/* 🚧 Custom routes can be added above */}
-                      {/* ❌ 404 Not Found */}
                       <Route path="*" element={<NotFound />} />
                     </Routes>
                   </Suspense>
