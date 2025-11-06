@@ -1,4 +1,4 @@
-// 🎉 src/components/PortfolioChatbot.tsx
+// src/components/PortfolioChatbot.tsx
 
 import { usePortfolioAssistantData } from "@/hooks/usePortfolioAssistantData";
 import { Button } from "@/components/ui/button";
@@ -26,15 +26,16 @@ export const PortfolioChatbot = () => {
     toggleVoice,
   } = usePortfolioAssistantData({ voiceEnabled: true }); // Custom hook for chat logic
 
-  // 🔄 Auto scroll to bottom whenever new messages arrive
+  // Auto scroll to bottom whenever new messages arrive
   useEffect(() => {
-    if (scrollRef.current)
+    if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
   }, [messages]);
 
   return (
     <>
-      {/* ---------------- Floating Chat Button ---------------- */}
+      {/* Floating Chat Button */}
       <motion.div
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
@@ -50,7 +51,7 @@ export const PortfolioChatbot = () => {
         </Button>
       </motion.div>
 
-      {/* ---------------- Chat Panel ---------------- */}
+      {/* Chat Panel */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -59,7 +60,7 @@ export const PortfolioChatbot = () => {
             exit={{ opacity: 0, y: 20 }}
             className="fixed bottom-24 right-6 z-50 w-96 h-[520px] bg-background border border-border rounded-xl shadow-2xl flex flex-col overflow-hidden"
           >
-            {/* --------- Header --------- */}
+            {/* Header */}
             <div className="p-4 border-b border-border bg-muted/50 flex justify-between items-center">
               <div>
                 <h3 className="font-semibold text-lg">Portfolio Assistant</h3>
@@ -77,7 +78,7 @@ export const PortfolioChatbot = () => {
               </Button>
             </div>
 
-            {/* --------- Messages --------- */}
+            {/* Messages */}
             <ScrollArea className="flex-1 p-4" ref={scrollRef}>
               <div className="space-y-3">
                 {messages.map((m, i) => (
@@ -86,11 +87,10 @@ export const PortfolioChatbot = () => {
                     className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}
                   >
                     <div
-                      className={`max-w-[75%] rounded-lg p-3 shadow-sm ${
-                        m.role === "user"
+                      className={`max-w-[75%] rounded-lg p-3 shadow-sm ${m.role === "user"
                           ? "bg-primary text-primary-foreground"
                           : "bg-muted text-foreground"
-                      }`}
+                        }`}
                     >
                       <p className="text-sm whitespace-pre-wrap">{m.content}</p>
                     </div>
@@ -105,7 +105,7 @@ export const PortfolioChatbot = () => {
               </div>
             </ScrollArea>
 
-            {/* --------- Input & Controls --------- */}
+            {/* Input & Controls */}
             <div className="p-3 border-t border-border flex gap-2 bg-muted/20">
               {/* Text input */}
               <Input

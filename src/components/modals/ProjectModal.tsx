@@ -1,7 +1,20 @@
-import { motion } from 'framer-motion';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
-import { ArrowTopRightOnSquareIcon, CodeBracketIcon, XMarkIcon, CalendarIcon } from '@heroicons/react/24/outline';
-import { Badge } from '@/components/ui/badge';
+// src/components/modals/ProjectModal.tsx
+
+import { motion } from "framer-motion";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import {
+  ArrowTopRightOnSquareIcon,
+  CodeBracketIcon,
+  XMarkIcon,
+  CalendarIcon,
+} from "@heroicons/react/24/outline";
+import { Badge } from "@/components/ui/badge";
 
 interface Project {
   id: string;
@@ -32,6 +45,7 @@ const ProjectModal = ({ project, isOpen, onClose }: ProjectModalProps) => {
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto glass-card">
         <DialogHeader>
+          {/* Modal Header */}
           <div className="flex items-start justify-between gap-4">
             <div className="space-y-2">
               <DialogTitle className="text-2xl font-bold bg-cosmic-gradient bg-clip-text text-transparent">
@@ -51,7 +65,7 @@ const ProjectModal = ({ project, isOpen, onClose }: ProjectModalProps) => {
         </DialogHeader>
 
         <div className="space-y-6">
-          {/* Project Image */}
+          {/* Project Image Section */}
           {project.image_url && (
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
@@ -70,8 +84,11 @@ const ProjectModal = ({ project, isOpen, onClose }: ProjectModalProps) => {
 
           {/* Project Details */}
           <div className="space-y-4">
+            {/* Description */}
             <div>
-              <h3 className="text-lg font-semibold text-foreground mb-2">About This Project</h3>
+              <h3 className="text-lg font-semibold text-foreground mb-2">
+                About This Project
+              </h3>
               <p className="text-muted-foreground leading-relaxed">
                 {project.description}
               </p>
@@ -82,18 +99,25 @@ const ProjectModal = ({ project, isOpen, onClose }: ProjectModalProps) => {
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <CalendarIcon className="w-4 h-4" />
                 <span>
-                  {project.start_date} {project.end_date ? `- ${project.end_date}` : '- Present'}
+                  {project.start_date}{" "}
+                  {project.end_date ? `- ${project.end_date}` : "- Present"}
                 </span>
               </div>
             )}
 
-            {/* Technologies */}
+            {/* Technologies Used */}
             {project.technologies && project.technologies.length > 0 && (
               <div>
-                <h4 className="text-md font-semibold text-foreground mb-2">Technologies Used</h4>
+                <h4 className="text-md font-semibold text-foreground mb-2">
+                  Technologies Used
+                </h4>
                 <div className="flex flex-wrap gap-2">
                   {project.technologies.map((tech, index) => (
-                    <Badge key={index} variant="secondary" className="bg-primary/10 text-primary">
+                    <Badge
+                      key={index}
+                      variant="secondary"
+                      className="bg-primary/10 text-primary"
+                    >
                       {tech}
                     </Badge>
                   ))}
@@ -101,13 +125,18 @@ const ProjectModal = ({ project, isOpen, onClose }: ProjectModalProps) => {
               </div>
             )}
 
-            {/* Features */}
+            {/* Key Features */}
             {project.features && project.features.length > 0 && (
               <div>
-                <h4 className="text-md font-semibold text-foreground mb-2">Key Features</h4>
+                <h4 className="text-md font-semibold text-foreground mb-2">
+                  Key Features
+                </h4>
                 <ul className="space-y-1">
                   {project.features.map((feature, index) => (
-                    <li key={index} className="text-muted-foreground flex items-start gap-2">
+                    <li
+                      key={index}
+                      className="text-muted-foreground flex items-start gap-2"
+                    >
                       <span className="text-primary text-sm">•</span>
                       <span className="text-sm">{feature}</span>
                     </li>
@@ -119,13 +148,17 @@ const ProjectModal = ({ project, isOpen, onClose }: ProjectModalProps) => {
             {/* Project Stats */}
             {project.stats && Object.keys(project.stats).length > 0 && (
               <div>
-                <h4 className="text-md font-semibold text-foreground mb-2">Project Stats</h4>
+                <h4 className="text-md font-semibold text-foreground mb-2">
+                  Project Stats
+                </h4>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   {Object.entries(project.stats).map(([key, value]) => (
                     <div key={key} className="glass-card p-3 text-center">
-                      <div className="text-lg font-bold text-primary">{value}</div>
+                      <div className="text-lg font-bold text-primary">
+                        {value}
+                      </div>
                       <div className="text-xs text-muted-foreground capitalize">
-                        {key.replace(/_/g, ' ')}
+                        {key.replace(/_/g, " ")}
                       </div>
                     </div>
                   ))}

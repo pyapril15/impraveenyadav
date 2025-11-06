@@ -1,4 +1,4 @@
-// 🎉 src/components/PortfolioRibbon.tsx
+// src/components/PortfolioRibbon.tsx
 
 import { usePersonalInfo, useProjects, useSkills } from '@/hooks/usePortfolioData';
 import { cn } from '@/lib/utils';
@@ -39,20 +39,17 @@ const PortfolioRibbon = () => {
 
     const messages = generateMessages();
 
-    // Typing effect
+    // Typing effect logic
     useEffect(() => {
         const currentMessage = messages[currentIndex];
-
         const typingSpeed = isDeleting ? 30 : 80;
 
         if (!isDeleting && displayText === currentMessage) {
-            // Pause at the end before deleting
             const timeout = setTimeout(() => setIsDeleting(true), 2000);
             return () => clearTimeout(timeout);
         }
 
         if (isDeleting && displayText === '') {
-            // Move to next message
             setIsDeleting(false);
             setCurrentIndex((prev) => (prev + 1) % messages.length);
             return;
@@ -70,7 +67,7 @@ const PortfolioRibbon = () => {
         return () => clearTimeout(timeout);
     }, [displayText, isDeleting, currentIndex, messages]);
 
-    // Highlight keywords in the text
+    // Highlighting specific keywords in the text
     const highlightText = (text: string) => {
         const keywords = [
             personalInfo?.name,
@@ -83,7 +80,6 @@ const PortfolioRibbon = () => {
             'Portfolio'
         ].filter(Boolean);
 
-        const highlightedText = text;
         const parts: React.ReactNode[] = [];
         let lastIndex = 0;
 

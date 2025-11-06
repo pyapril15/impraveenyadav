@@ -1,5 +1,4 @@
-// 🎉 src/components/FestivalOverlay.tsx
-// Displays countdowns for today's and next festivals with animations and styling
+// src/components/FestivalOverlay.tsx
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -24,7 +23,7 @@ const FestivalOverlay = () => {
   // Festival data from custom hook
   const { todayFestival, nextFestival, isLoading, error } = useNextFestival();
 
-  /* ⏳ Countdown timer effect */
+  /* Countdown timer effect */
   useEffect(() => {
     if (!todayFestival && !nextFestival) return;
 
@@ -79,7 +78,10 @@ const FestivalOverlay = () => {
         animate={{ opacity: 1, x: 0 }}
         exit={{ opacity: 0, x: 100 }}
         transition={{ duration: 0.5 }}
-        className={`fixed top-20 right-4 z-50 ${hasBothFestivals ? "w-[340px]" : "w-[380px]"}`}
+        className={`fixed top-16 sm:top-20 right-2 sm:right-4 z-50 
+          w-[calc(100vw-1rem)] sm:w-[340px] md:w-[380px] 
+          max-w-[400px]
+          ${hasBothFestivals ? "sm:w-[340px]" : "sm:w-[380px]"}`}
       >
         <div className="relative">
           {/* Overlay Container */}
@@ -91,14 +93,14 @@ const FestivalOverlay = () => {
             <div className="absolute -inset-1 bg-gradient-to-r from-primary via-accent to-primary opacity-20 blur-xl" />
 
             {/* Content */}
-            <div className={`relative ${hasBothFestivals ? "p-4" : "p-6"}`}>
+            <div className={`relative ${hasBothFestivals ? "p-3 sm:p-4" : "p-4 sm:p-6"}`}>
               {/* Close Button */}
               <button
                 onClick={() => setIsVisible(false)}
-                className="absolute top-3 right-3 p-2 rounded-full bg-background/80 hover:bg-background transition-colors z-10"
+                className="absolute top-2 right-2 sm:top-3 sm:right-3 p-1.5 sm:p-2 rounded-full bg-background/80 hover:bg-background transition-colors z-10"
                 aria-label="Close festival notification"
               >
-                <X className="w-4 h-4" />
+                <X className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
               </button>
 
               {/* Loading State */}
@@ -118,22 +120,22 @@ const FestivalOverlay = () => {
                 <>
                   {/* Today's Festival Countdown */}
                   {todayFestival && (
-                    <div className="mb-3">
-                      <div className="flex items-center gap-2 mb-2">
+                    <div className="mb-2.5 sm:mb-3">
+                      <div className="flex items-center gap-2 mb-1.5 sm:mb-2">
                         <div className="flex items-center gap-1.5">
                           <span className="relative flex h-2 w-2">
                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
                             <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
                           </span>
-                          <span className="text-xs font-semibold text-primary">TODAY</span>
+                          <span className="text-[10px] sm:text-xs font-semibold text-primary">TODAY</span>
                         </div>
                       </div>
-                      <div className="bg-background/80 rounded-xl p-3 border border-primary/20">
-                        <h3 className="text-lg font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent mb-2">
+                      <div className="bg-background/80 rounded-xl p-2.5 sm:p-3 border border-primary/20">
+                        <h3 className="text-base sm:text-lg font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent mb-1.5 sm:mb-2">
                           {todayFestival.name}
                         </h3>
-                        <div className="text-xs text-muted-foreground mb-2">Ends in</div>
-                        <div className="grid grid-cols-4 gap-1.5">
+                        <div className="text-[10px] sm:text-xs text-muted-foreground mb-1.5 sm:mb-2">Ends in</div>
+                        <div className="grid grid-cols-4 gap-1 sm:gap-1.5">
                           {[
                             { value: todayTimeLeft.days, label: "Days" },
                             { value: todayTimeLeft.hours, label: "Hrs" },
@@ -142,10 +144,10 @@ const FestivalOverlay = () => {
                           ].map((item) => (
                             <div
                               key={item.label}
-                              className="bg-background/60 rounded-lg p-2 text-center border border-primary/10"
+                              className="bg-background/60 rounded-lg p-1.5 sm:p-2 text-center border border-primary/10"
                             >
-                              <div className="text-xl font-bold text-primary tabular-nums">{item.value}</div>
-                              <div className="text-[10px] text-muted-foreground">{item.label}</div>
+                              <div className="text-lg sm:text-xl font-bold text-primary tabular-nums">{item.value}</div>
+                              <div className="text-[9px] sm:text-[10px] text-muted-foreground">{item.label}</div>
                             </div>
                           ))}
                         </div>
@@ -157,30 +159,30 @@ const FestivalOverlay = () => {
                   {nextFestival && (
                     <div>
                       {todayFestival ? (
-                        <div className="flex items-center gap-2 mb-2">
-                          <Calendar className="w-4 h-4 text-accent" />
-                          <span className="text-xs font-semibold text-accent">UPCOMING</span>
+                        <div className="flex items-center gap-2 mb-1.5 sm:mb-2">
+                          <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-accent" />
+                          <span className="text-[10px] sm:text-xs font-semibold text-accent">UPCOMING</span>
                         </div>
                       ) : (
-                        <div className="flex items-center gap-2 mb-3">
-                          <Calendar className="w-5 h-5 text-primary" />
+                        <div className="flex items-center gap-2 mb-2 sm:mb-3">
+                          <Calendar className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
                         </div>
                       )}
-                      <div className="bg-background/60 rounded-xl p-3 border border-primary/10">
+                      <div className="bg-background/60 rounded-xl p-2.5 sm:p-3 border border-primary/10">
                         <h3
-                          className={`${hasBothFestivals ? "text-lg" : "text-2xl"
-                            } font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent mb-2`}
+                          className={`${hasBothFestivals ? "text-base sm:text-lg" : "text-xl sm:text-2xl"
+                            } font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent mb-1.5 sm:mb-2`}
                         >
                           {nextFestival.name}
                         </h3>
                         <div
-                          className={`text-center ${hasBothFestivals ? "text-sm" : "text-base"
-                            } text-foreground mb-2`}
+                          className={`text-center ${hasBothFestivals ? "text-xs sm:text-sm" : "text-sm sm:text-base"
+                            } text-foreground mb-1.5 sm:mb-2`}
                         >
                           {nextFestival.date} {nextFestival.monthName} {nextFestival.fullDate.getFullYear()}
                         </div>
-                        <div className="text-xs text-muted-foreground mb-2 text-center">Coming in</div>
-                        <div className="grid grid-cols-4 gap-1.5">
+                        <div className="text-[10px] sm:text-xs text-muted-foreground mb-1.5 sm:mb-2 text-center">Coming in</div>
+                        <div className="grid grid-cols-4 gap-1 sm:gap-1.5">
                           {[
                             { value: nextTimeLeft.days, label: "Days" },
                             { value: nextTimeLeft.hours, label: "Hrs" },
@@ -192,15 +194,15 @@ const FestivalOverlay = () => {
                               initial={{ scale: 0.8, opacity: 0 }}
                               animate={{ scale: 1, opacity: 1 }}
                               transition={{ delay: index * 0.1 }}
-                              className="bg-background/80 rounded-lg p-2 text-center border border-primary/10"
+                              className="bg-background/80 rounded-lg p-1.5 sm:p-2 text-center border border-primary/10"
                             >
                               <div
-                                className={`${hasBothFestivals ? "text-xl" : "text-2xl"
+                                className={`${hasBothFestivals ? "text-lg sm:text-xl" : "text-xl sm:text-2xl"
                                   } font-bold text-primary tabular-nums`}
                               >
                                 {item.value}
                               </div>
-                              <div className="text-[10px] text-muted-foreground">{item.label}</div>
+                              <div className="text-[9px] sm:text-[10px] text-muted-foreground">{item.label}</div>
                             </motion.div>
                           ))}
                         </div>
@@ -209,7 +211,7 @@ const FestivalOverlay = () => {
                   )}
 
                   {/* Footer note */}
-                  <div className="text-center text-[10px] text-muted-foreground mt-3">
+                  <div className="text-center text-[10px] text-muted-foreground mt-2.5 sm:mt-3">
                     API: indian-festivals-api
                   </div>
                 </>

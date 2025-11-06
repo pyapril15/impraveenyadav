@@ -1,4 +1,3 @@
-// 📦 Redis Cache Utility
 // Location: src/lib/redis.ts
 
 const EDGE_FUNCTION_URL =
@@ -9,7 +8,6 @@ const MAX_RETRIES = 3;
 const BACKOFF_BASE = 200;
 const CIRCUIT_BREAKER_THRESHOLD = 5;
 const CIRCUIT_BREAKER_RESET = 10000;
-const REFRESH_INTERVAL = 5000;
 
 type RedisResponse<T> = { success?: boolean; data?: T };
 
@@ -25,7 +23,10 @@ function fetchWithTimeout(
   timeout = DEFAULT_TIMEOUT
 ): Promise<Response> {
   return new Promise((resolve, reject) => {
-    const timer = setTimeout(() => reject(new Error("Request timed out")), timeout);
+    const timer = setTimeout(
+      () => reject(new Error("Request timed out")),
+      timeout
+    );
     fetch(url, options)
       .then((res) => {
         clearTimeout(timer);
@@ -53,7 +54,9 @@ class RedisCache {
     payload: Record<string, unknown>
   ): Promise<T | null> {
     if (this.isCircuitOpen()) {
-      console.warn("Redis circuit breaker is open. Returning null immediately.");
+      console.warn(
+        "Redis circuit breaker is open. Returning null immediately."
+      );
       return null;
     }
 
@@ -78,13 +81,17 @@ class RedisCache {
 
         if (this.consecutiveFailures >= CIRCUIT_BREAKER_THRESHOLD) {
           this.circuitOpenUntil = Date.now() + CIRCUIT_BREAKER_RESET;
-          console.error("Redis circuit breaker opened due to repeated failures.");
+          console.error(
+            "Redis circuit breaker opened due to repeated failures."
+          );
           return null;
         }
 
         const backoff = BACKOFF_BASE * Math.pow(2, attempt);
         console.warn(
-          `Redis request attempt ${attempt + 1} failed, retrying in ${backoff}ms`,
+          `Redis request attempt ${
+            attempt + 1
+          } failed, retrying in ${backoff}ms`,
           err
         );
         await sleep(backoff);
@@ -175,12 +182,17 @@ class RedisCache {
   // 📚 Batch get
   async mget<T>(keys: string[], ttlSeconds?: number): Promise<(T | null)[]> {
     this.validateKeys(keys);
-    const results = await Promise.all(keys.map((key) => this.get<T>(key, ttlSeconds)));
+    const results = await Promise.all(
+      keys.map((key) => this.get<T>(key, ttlSeconds))
+    );
     return results;
   }
 
   // 🧩 Batch set
-  async mset<T>(entries: Record<string, T>, ttlSeconds?: number): Promise<boolean> {
+  async mset<T>(
+    entries: Record<string, T>,
+    ttlSeconds?: number
+  ): Promise<boolean> {
     const keys = Object.keys(entries);
     this.validateKeys(keys);
     const result = await this.request<{ success: boolean }>({
@@ -189,7 +201,9 @@ class RedisCache {
       ttl: ttlSeconds,
     });
     if (result?.success) {
-      Object.entries(entries).forEach(([k, v]) => this.backgroundCache.set(k, v));
+      Object.entries(entries).forEach(([k, v]) =>
+        this.backgroundCache.set(k, v)
+      );
     }
     return result?.success ?? false;
   }

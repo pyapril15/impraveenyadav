@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import { useProjects } from '@/hooks/usePortfolioData';
 
-const FeaturedProjects = () => {
+const FeaturedProjectsSection = () => {
   const { data: projects } = useProjects(true);
 
   return (
@@ -118,4 +118,4 @@ const FeaturedProjects = () => {
   );
 };
 
-export default FeaturedProjects;
+export default FeaturedProjectsSection;

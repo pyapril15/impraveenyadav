@@ -1,12 +1,11 @@
-// 🎯 usePortfolioData Hook Suite
-// Location: src/hooks/usePortfolioData.ts
+// src/hooks/usePersonalInfo.ts
 
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { redis } from "@/lib/redis";
 import type { Tables } from "@/integrations/supabase/types";
 
-/* 🧩 Type Definitions */
+// Type Definitions
 export type PersonalInfo = {
   id: string;
   name: string;
@@ -28,20 +27,20 @@ export type Skill = Tables<"skills">;
 export type Certification = Tables<"certifications">;
 export type JourneyTimeline = Tables<"journey_timeline">;
 
-/* ⚙️ Query Config */
+// Query Config
 const STALE_TIME = 10 * 60 * 1000; // 10 min
 const GC_TIME = 15 * 60 * 1000; // 15 min
 
-// 🎛 Fine-tuned Redis TTLs (seconds)
+// Redis TTL (seconds)
 const TTL = {
-  personal_info: 86400, // 24h
-  projects: 300, // 5m
+  personal_info: 300, // 5m
+  projects: 240, // 4m
   skills: 3600, // 1h
   certifications: 3600, // 1h
-  journey_timeline: 600, // 10m
+  journey_timeline: 3600, // 1h
 };
 
-/* 🧠 Helper: Cache-aware fetcher with fallback */
+// Cache-aware fetcher
 async function fetchWithCache<T>(
   cacheKey: string,
   fetcher: () => Promise<T>,
@@ -49,37 +48,27 @@ async function fetchWithCache<T>(
 ): Promise<T> {
   try {
     const cached = await redis.get<T>(cacheKey);
-    if (cached !== null && cached !== undefined) {
-      if (import.meta.env.DEV)
-        console.log(`🧠 [Redis HIT] ${cacheKey}`, cached);
-      return cached;
-    }
-  } catch (err: unknown) {
+    if (cached) return cached;
+  } catch (err) {
     console.error(`Redis GET error for key "${cacheKey}":`, err);
   }
 
-  // Redis miss → fetch fresh data
   try {
     const data = await fetcher();
-    // fire-and-forget cache write
-    redis.set(cacheKey, data, ttlSeconds).catch((e) =>
-      console.warn(`Redis SET failed for ${cacheKey}:`, e)
-    );
-    if (import.meta.env.DEV) console.log(`🌐 [Fetch] ${cacheKey}`);
+    redis
+      .set(cacheKey, data, ttlSeconds)
+      .catch((e) => console.warn(`Redis SET failed for ${cacheKey}:`, e));
     return data;
   } catch (fetchErr) {
     console.error(`Fetcher failed for ${cacheKey}:`, fetchErr);
-    // fallback: try again after small delay
-    await new Promise((r) => setTimeout(r, 300));
+    await new Promise((r) => setTimeout(r, 300)); // Retry delay
     return await fetcher();
   }
 }
 
-/* -------------------------------------------------------------------------- */
-/*                                 Hooks                                      */
-/* -------------------------------------------------------------------------- */
+// Hooks
 
-// 👤 Personal Info
+// Personal Info
 export const usePersonalInfo = () =>
   useQuery({
     queryKey: ["personal_info"],
@@ -104,7 +93,7 @@ export const usePersonalInfo = () =>
     placeholderData: (old) => old,
   });
 
-// 💼 Projects
+// Projects
 export const useProjects = (featured?: boolean) => {
   const cacheKey = `projects-${featured ? "featured" : "all"}`;
   return useQuery({
@@ -133,7 +122,7 @@ export const useProjects = (featured?: boolean) => {
   });
 };
 
-// 🧠 Skills
+// Skills
 export const useSkills = () =>
   useQuery({
     queryKey: ["skills"],
@@ -158,7 +147,7 @@ export const useSkills = () =>
     placeholderData: (old) => old,
   });
 
-// 🎓 Certifications
+// Certifications
 export const useCertifications = () =>
   useQuery({
     queryKey: ["certifications"],
@@ -183,7 +172,7 @@ export const useCertifications = () =>
     placeholderData: (old) => old,
   });
 
-// 🕰 Journey Timeline
+// Journey Timeline
 export const useJourneyTimeline = () =>
   useQuery({
     queryKey: ["journey_timeline"],

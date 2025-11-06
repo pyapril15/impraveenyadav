@@ -1,6 +1,19 @@
-import { motion } from 'framer-motion';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
-import { AcademicCapIcon, CalendarIcon, ArrowTopRightOnSquareIcon, XMarkIcon } from '@heroicons/react/24/outline';
+// src/components/modals/CertificationModal.tsx
+
+import { motion } from "framer-motion";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import {
+  AcademicCapIcon,
+  CalendarIcon,
+  ArrowTopRightOnSquareIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
 
 interface Certification {
   id: string;
@@ -17,13 +30,18 @@ interface CertificationModalProps {
   onClose: () => void;
 }
 
-const CertificationModal = ({ certification, isOpen, onClose }: CertificationModalProps) => {
+const CertificationModal = ({
+  certification,
+  isOpen,
+  onClose,
+}: CertificationModalProps) => {
   if (!certification) return null;
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl glass-card">
         <DialogHeader>
+          {/* Modal Header */}
           <div className="flex items-start justify-between gap-4">
             <div className="space-y-2">
               <DialogTitle className="text-2xl font-bold bg-cosmic-gradient bg-clip-text text-transparent">
@@ -43,7 +61,7 @@ const CertificationModal = ({ certification, isOpen, onClose }: CertificationMod
         </DialogHeader>
 
         <div className="space-y-6">
-          {/* Header with Icon */}
+          {/* Certification Details Section */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -64,36 +82,47 @@ const CertificationModal = ({ certification, isOpen, onClose }: CertificationMod
             </div>
           </motion.div>
 
-          {/* Description */}
+          {/* Description Section */}
           <div className="space-y-4">
-            <h4 className="text-lg font-semibold text-foreground">About This Certification</h4>
+            <h4 className="text-lg font-semibold text-foreground">
+              About This Certification
+            </h4>
             <p className="text-muted-foreground leading-relaxed">
               {certification.description}
             </p>
           </div>
 
-          {/* Certification Features */}
+          {/* Issuing Organization and Date Earned */}
           <div className="grid md:grid-cols-2 gap-4">
             <div className="glass-card p-4">
-              <h5 className="font-semibold text-foreground mb-2">Issuing Organization</h5>
-              <p className="text-primary font-medium">{certification.organization}</p>
+              <h5 className="font-semibold text-foreground mb-2">
+                Issuing Organization
+              </h5>
+              <p className="text-primary font-medium">
+                {certification.organization}
+              </p>
             </div>
             <div className="glass-card p-4">
-              <h5 className="font-semibold text-foreground mb-2">Date Earned</h5>
+              <h5 className="font-semibold text-foreground mb-2">
+                Date Earned
+              </h5>
               <p className="text-muted-foreground">{certification.date}</p>
             </div>
           </div>
 
-          {/* Skills Validation */}
+          {/* Skills Validated Section */}
           <div className="glass-card p-4 border-l-4 border-primary">
-            <h5 className="font-semibold text-foreground mb-2">Skills Validated</h5>
+            <h5 className="font-semibold text-foreground mb-2">
+              Skills Validated
+            </h5>
             <p className="text-muted-foreground text-sm leading-relaxed">
-              This certification validates expertise and knowledge in the specified domain, 
-              demonstrating proficiency through rigorous assessment and practical application.
+              This certification validates expertise and knowledge in the
+              specified domain, demonstrating proficiency through rigorous
+              assessment and practical application.
             </p>
           </div>
 
-          {/* Action Button */}
+          {/* Action Button to View Certificate */}
           {certification.link && (
             <div className="pt-2">
               <a

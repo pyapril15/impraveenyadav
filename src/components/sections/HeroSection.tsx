@@ -1,4 +1,4 @@
-// src/components/HeroSection.tsx
+// src/components/sections/HeroSection.tsx
 
 import { motion } from 'framer-motion';
 import { CodeBracketIcon } from '@heroicons/react/24/outline';
@@ -8,7 +8,7 @@ import {
   useSkills,
   useCertifications,
 } from '@/hooks/usePortfolioData';
-import CircularProfile from './CircularProfile';
+import CircularProfile from '../CircularProfile';
 
 const HeroSection = () => {
   const { data: personalInfo, isLoading } = usePersonalInfo();

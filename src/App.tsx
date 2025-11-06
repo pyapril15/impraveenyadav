@@ -1,5 +1,4 @@
-// ⚛️ Main Application Entry
-// Location: src/App.tsx
+// src/App.tsx
 
 import { useState, lazy, Suspense, useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
@@ -14,11 +13,11 @@ import FestivalOverlay from "@/components/FestivalOverlay";
 import { PortfolioChatbot } from "@/components/PortfolioChatbot";
 import PortfolioRibbon from "@/components/PortfolioRibbon";
 
-// ⬇️ Import the fetch functions used in hooks (not hooks themselves)
+// Import data fetching functions (not hooks themselves)
 import { supabase } from "@/integrations/supabase/client";
 import { redis } from "@/lib/redis";
 
-/* 🧩 Lazy-loaded Pages */
+// Lazy-loaded Pages
 const Index = lazy(() => import("./pages/Index"));
 const About = lazy(() => import("./pages/About"));
 const Projects = lazy(() => import("./pages/Projects"));
@@ -27,31 +26,33 @@ const Certificates = lazy(() => import("./pages/Certificates"));
 const Contact = lazy(() => import("./pages/Contact"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
-/* ⏳ Fallback Loader */
+// Fallback Loader for lazy-loaded pages
 const PageLoader = () => (
   <div className="min-h-screen flex items-center justify-center bg-background">
     <div className="flex flex-col items-center gap-4">
       <div className="animate-pulse-cosmic">
         <div className="w-16 h-16 bg-primary/20 rounded-full"></div>
       </div>
-      <p className="text-muted-foreground text-sm font-medium">Loading page...</p>
+      <p className="text-muted-foreground text-sm font-medium">
+        Loading page...
+      </p>
     </div>
   </div>
 );
 
-/* ⚙️ React Query Configuration */
+// React Query Configuration
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 1000 * 60 * 5, // 5 minutes
-      gcTime: 1000 * 60 * 10, // 10 minutes
-      retry: 1,
-      refetchOnWindowFocus: false,
+      staleTime: 1000 * 60 * 5, // Cache for 5 minutes
+      gcTime: 1000 * 60 * 10, // Garbage collect after 10 minutes
+      retry: 1, // Retry failed queries once
+      refetchOnWindowFocus: false, // Do not refetch when window is focused
     },
   },
 });
 
-/* 🧠 Data Fetchers (for Prefetching) */
+// Data Fetchers (for Prefetching)
 const fetchPersonalInfo = async () => {
   const cacheKey = "personal_info";
   const cached = await redis.get(cacheKey);
@@ -64,7 +65,7 @@ const fetchPersonalInfo = async () => {
     .maybeSingle();
 
   if (error) throw error;
-  if (data) redis.set(cacheKey, data, 86400).catch(() => null);
+  if (data) redis.set(cacheKey, data, 300).catch(() => null); // Cache for 5 minutes
   return data;
 };
 
@@ -73,10 +74,12 @@ const fetchFestivals = async (year: number) => {
   const cached = await redis.get(cacheKey);
   if (cached) return cached;
 
-  const res = await fetch(`https://indian-festivals-api.onrender.com/api/v1/festivals/${year}`);
+  const res = await fetch(
+    `https://indian-festivals-api.onrender.com/api/v1/festivals/${year}`
+  );
   if (!res.ok) throw new Error("Failed to fetch festivals");
   const json = await res.json();
-  redis.set(cacheKey, json, 86400).catch(() => null);
+  redis.set(cacheKey, json, 86400).catch(() => null); // Cache for 1 day
   return json;
 };
 
@@ -85,14 +88,16 @@ const fetchReligiousFestivals = async (year: number) => {
   const cached = await redis.get(cacheKey);
   if (cached) return cached;
 
-  const res = await fetch(`https://indian-festivals-api.onrender.com/api/v1/festivals/${year}/religious`);
+  const res = await fetch(
+    `https://indian-festivals-api.onrender.com/api/v1/festivals/${year}/religious`
+  );
   if (!res.ok) throw new Error("Failed to fetch religious festivals");
   const json = await res.json();
-  redis.set(cacheKey, json, 86400).catch(() => null);
+  redis.set(cacheKey, json, 86400).catch(() => null); // Cache for 1 day
   return json;
 };
 
-/* 🧠 Prefetch Key App Data */
+// Prefetch essential data for performance optimization
 async function prefetchEssentialData() {
   try {
     const currentYear = new Date().getFullYear();
@@ -110,13 +115,13 @@ async function prefetchEssentialData() {
         queryFn: () => fetchReligiousFestivals(currentYear),
       }),
     ]);
-    if (import.meta.env.DEV) console.log("⚡ Prefetched essential data.");
+    if (import.meta.env.DEV) console.log("Prefetched essential data.");
   } catch (err) {
     console.warn("Prefetch failed:", err);
   }
 }
 
-/* 🧩 Prefetch Secondary (Idle) Routes */
+// Prefetch idle pages when the main thread is idle
 function prefetchIdlePages() {
   if ("requestIdleCallback" in window) {
     requestIdleCallback(() => {
@@ -129,7 +134,7 @@ function prefetchIdlePages() {
       ].forEach((loader) => loader());
     });
   } else {
-    setTimeout(prefetchIdlePages, 3000);
+    setTimeout(prefetchIdlePages, 3000); // Fallback for older browsers
   }
 }
 
@@ -144,7 +149,7 @@ const ScrollToTop = () => {
   return null;
 };
 
-/* 🧠 Main App Component */
+// Main App Component
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
 
@@ -152,16 +157,20 @@ const App = () => {
     setIsLoading(false);
   };
 
-  /* 📊 Performance Metrics */
+  // Log performance metrics
   useEffect(() => {
-    if (!isLoading && typeof window !== "undefined" && window.performance?.timing) {
+    if (
+      !isLoading &&
+      typeof window !== "undefined" &&
+      window.performance?.timing
+    ) {
       const t = window.performance.timing;
       const loadTime = t.loadEventEnd - t.navigationStart;
-      console.log(`✓ App interactive in ${loadTime}ms`);
+      console.log(`App interactive in ${loadTime}ms`);
     }
   }, [isLoading]);
 
-  /* 🪄 Prefetch Data & Idle Pages */
+  // Prefetch data and idle pages
   useEffect(() => {
     prefetchEssentialData();
     prefetchIdlePages();
